@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="SAT GPT.png" type="image/x-icon" />
+    <meta name="google-site-verification" content="WfafFjE47rbuVmaEKBbGgok-o_88vRz1uf8Jywte6xk" />
+    <title>SAT GPT</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    
+    <div id="copyright" align="center">
+        &copy; 2024 - All Rights Reserved.
+        <span>Last Updated: </span>
+    </div>
+    
+    <script>
+        (() => {
+            const copyrightElement = document.getElementById("copyright");
+            const currentYear = new Date().getFullYear();
+            const lastModified = new Date(document.lastModified).toLocaleString();
+            copyrightElement.innerHTML = `&copy; 2024 - ${currentYear} <a href="https://sat-gpt-psi.vercel.app/" target="_blank">https://sat-gpt-psi.vercel.app/</a> - All Rights Reserved.<br/>Last Updated: ${lastModified}`;
+        })();
+    </script>
+  </body>
+</html>
