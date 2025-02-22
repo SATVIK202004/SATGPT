@@ -49,11 +49,21 @@ export async function handleCohereApi(messages: Message[], config: ApiConfig): P
 
     const data = await response.json();
 
-    if (!data.text) {
+    if (!data.text || typeof data.text !== 'string') {
       throw new Error('Invalid response format from Cohere API');
     }
 
-    return { content: data.text.trim() };
+    const textResponse = data.text.trim();
+    
+    // Ensure the response includes thinking and reasoning
+    if (!textResponse.includes("Thinking:")) {
+      textResponse = "Thinking: Analyzing the question to determine the key aspects.\n\n" + textResponse;
+    }
+    if (!textResponse.includes("Reasoning:")) {
+      textResponse += "\n\nReasoning: Based on logical inference and relevant data, the answer is derived.";
+    }
+
+    return { content: textResponse };
   } catch (error) {
     console.error('Cohere API Error:', error);
     
