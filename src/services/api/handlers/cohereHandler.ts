@@ -53,7 +53,7 @@ export async function handleCohereApi(messages: Message[], config: ApiConfig): P
       throw new Error('Invalid response format from Cohere API');
     }
 
-    const textResponse = data.text.trim();
+    let textResponse = data.text.trim();
     
     // Ensure the response includes thinking and reasoning
     if (!textResponse.includes("Thinking:")) {
