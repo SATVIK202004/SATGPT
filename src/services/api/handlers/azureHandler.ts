@@ -11,10 +11,10 @@ export async function handleAzureApi(messages: Message[], config: ApiConfig): Pr
       { 
         role: 'system', 
         content: `${systemPrompt}\n\nPlease structure your responses with the following components:
-          1. Initial Analysis: Break down the question and identify key aspects
-          2. Deep Thinking: Consider multiple perspectives and implications
-          3. Logical Reasoning: Form a clear chain of thought
-          4. Final Response: Provide a comprehensive answer
+          1. Initial Analysis: Break down the question and identify key aspects.
+          2. Deep Thinking: Consider multiple perspectives and implications.
+          3. Logical Reasoning: Form a clear chain of thought.
+          4. Final Response: Provide a comprehensive answer.
           
           Always maintain clarity and logical flow in your responses.`
       },
@@ -38,16 +38,7 @@ export async function handleAzureApi(messages: Message[], config: ApiConfig): Pr
         top_p: 0.9,
         frequency_penalty: 0.3,
         presence_penalty: 0.3,
-        response_format: {
-          type: "text",
-          structure: {
-            initial_analysis: "Breakdown of the question and key components",
-            deep_thinking: "Multiple perspectives and implications",
-            logical_reasoning: "Clear chain of thought",
-            final_response: "Comprehensive answer"
-          }
-        },
-        stream: false
+        stream: false  // Removed response_format
       }),
     });
 
@@ -63,37 +54,6 @@ export async function handleAzureApi(messages: Message[], config: ApiConfig): Pr
     }
 
     let content = data.choices[0].message.content;
-
-    // If the response doesn't already have the structured format, add it
-    if (!content.includes('Initial Analysis:') && 
-        !content.includes('Deep Thinking:') && 
-        !content.includes('Logical Reasoning:')) {
-      
-      // Split content into meaningful segments
-      const segments = content.split('\n\n');
-      const analysis = segments[0] || '';
-      const thinking = segments.length > 1 ? segments[1] : '';
-      const reasoning = segments.length > 2 ? segments[2] : '';
-      const finalResponse = segments.slice(3).join('\n\n') || content;
-
-      content = `Initial Analysis:\n${'-'.repeat(40)}\n` +
-                `• Question Components:\n${analysis}\n\n` +
-                
-                `Deep Thinking:\n${'-'.repeat(40)}\n` +
-                `• Multiple Perspectives:\n${thinking}\n` +
-                `• Key Considerations:\n` +
-                `  - Context and implications\n` +
-                `  - Potential challenges\n` +
-                `  - Alternative viewpoints\n\n` +
-                
-                `Logical Reasoning:\n${'-'.repeat(40)}\n` +
-                `• Reasoning Chain:\n${reasoning}\n` +
-                `• Supporting Evidence:\n` +
-                `  - Validated assumptions\n` +
-                `  - Considered trade-offs\n\n` +
-                
-                `Final Response:\n${'-'.repeat(40)}\n${finalResponse}`;
-    }
 
     return { content };
   } catch (error) {
