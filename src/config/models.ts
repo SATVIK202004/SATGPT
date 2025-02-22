@@ -69,7 +69,7 @@ export const modelConfigs: Record<string, ApiConfig> = {
   },
   'GPT-4o': {
     url: 'https://models.inference.ai.azure.com/chat/completions',
-    key: '',
+    key: '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',
     model: 'gpt-4o',
   },
   'NVIDIA Deepseek-R1': {
