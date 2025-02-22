@@ -49,7 +49,7 @@ export const modelConfigs: Record<string, ApiConfig> = {
   },
   'Gpt-4o mini': {
     url: 'https://models.inference.ai.azure.com/chat/completions',
-    key: '',
+    key: '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',
     model: 'gpt-4o-mini',
   },
   'Qwen-2.5': {
