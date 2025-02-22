@@ -6,17 +6,42 @@ export async function handleAzureApi(messages: Message[], config: ApiConfig): Pr
   try {
     const systemPrompt = getSystemPrompt(messages.some(msg => msg.content.includes('SAT GPT')));
     
-    // Enhanced prompt to encourage structured thinking
+    // Force the model to respond in the required structured format
     const enhancedMessages = [
       { 
         role: 'system', 
-        content: `${systemPrompt}\n\nPlease structure your responses with the following components:
-          1. Initial Analysis: Break down the question and identify key aspects.
-          2. Deep Thinking: Consider multiple perspectives and implications.
-          3. Logical Reasoning: Form a clear chain of thought.
-          4. Final Response: Provide a comprehensive answer.
-          
-          Always maintain clarity and logical flow in your responses.`
+        content: `${systemPrompt}\n\n
+        You must structure your response using the following format:
+        
+        **Initial Analysis:**  
+        - Breakdown of the question and key components.  
+        
+        **Deep Thinking:**  
+        - Consider multiple perspectives and implications.  
+        - Context, potential challenges, and alternative viewpoints.  
+        
+        **Logical Reasoning:**  
+        - Clear chain of thought.  
+        - Supporting evidence and trade-offs.  
+        
+        **Final Response:**  
+        - A well-structured, concise, and informative answer.  
+        
+        **Example Format:**
+        ---
+        Initial Analysis:  
+        - [Breakdown of the problem]  
+        
+        Deep Thinking:  
+        - [Different perspectives, challenges]  
+        
+        Logical Reasoning:  
+        - [Step-by-step reasoning]  
+        
+        Final Response:  
+        - [Concise and actionable answer]  
+        
+        Your response must strictly follow this format.`
       },
       ...messages.map(msg => ({
         role: msg.role,
@@ -38,7 +63,7 @@ export async function handleAzureApi(messages: Message[], config: ApiConfig): Pr
         top_p: 0.9,
         frequency_penalty: 0.3,
         presence_penalty: 0.3,
-        stream: false  // Removed response_format
+        stream: false  // Removed response_format, handled manually
       }),
     });
 
@@ -54,6 +79,25 @@ export async function handleAzureApi(messages: Message[], config: ApiConfig): Pr
     }
 
     let content = data.choices[0].message.content;
+
+    // Ensure the response follows the required structured format
+    if (!content.includes('Initial Analysis:') || 
+        !content.includes('Deep Thinking:') || 
+        !content.includes('Logical Reasoning:') || 
+        !content.includes('Final Response:')) {
+      
+      // Split response to organize it better
+      const segments = content.split('\n\n');
+      const analysis = segments[0] || 'N/A';
+      const thinking = segments.length > 1 ? segments[1] : 'N/A';
+      const reasoning = segments.length > 2 ? segments[2] : 'N/A';
+      const finalResponse = segments.slice(3).join('\n\n') || content;
+
+      content = `**Initial Analysis:**\n${analysis}\n\n` +
+                `**Deep Thinking:**\n${thinking}\n\n` +
+                `**Logical Reasoning:**\n${reasoning}\n\n` +
+                `**Final Response:**\n${finalResponse}`;
+    }
 
     return { content };
   } catch (error) {
