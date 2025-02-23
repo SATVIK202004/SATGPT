@@ -12,8 +12,25 @@ const NVIDIA_DEFAULTS = {
   stream: true
 };
 
+// Function to handle fetch with a timeout
+async function fetchWithTimeout(url: string, options: RequestInit, timeout = 10000): Promise<Response> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
+  try {
+    return await fetch(url, { ...options, signal: controller.signal });
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
 export async function handleNvidiaApi(messages: Message[], config: ApiConfig): Promise<ModelResponse> {
   try {
+    if (!config.url || !config.key) {
+      throw new Error('Missing NVIDIA API URL or API Key.');
+    }
+
+    console.log('NVIDIA API URL:', config.url);
+
     // Format messages to match NVIDIA's expected format
     const formattedMessages = [
       { role: 'system', content: getSystemPrompt(messages.some(msg => msg.content.includes('SAT GPT'))) },
@@ -24,7 +41,7 @@ export async function handleNvidiaApi(messages: Message[], config: ApiConfig): P
     ];
 
     // Prepare request with LangChain-like configuration
-    const response = await fetch(config.url, {
+    const response = await fetchWithTimeout(config.url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -48,14 +65,23 @@ export async function handleNvidiaApi(messages: Message[], config: ApiConfig): P
       throw new Error(`NVIDIA API request failed: ${response.status} ${response.statusText}`);
     }
 
-    const data = await response.json();
-    
-    // Enhanced response handling with better type checking
-    if (!data || typeof data !== 'object') {
-      throw new Error('Invalid response from NVIDIA API: Empty or non-object response');
+    // Parse the response safely
+    const responseText = await response.text();
+    console.log('Raw NVIDIA API Response:', responseText);
+
+    let data;
+    try {
+      data = JSON.parse(responseText);
+    } catch (jsonError) {
+      console.error('Failed to parse JSON:', jsonError);
+      throw new Error('Invalid JSON response from NVIDIA API');
     }
 
-    // Handle different response formats with type checking
+    if (!data || typeof data !== 'object') {
+      throw new Error('Unexpected response format from NVIDIA API');
+    }
+
+    // Extract response content
     let content = '';
     if (Array.isArray(data.choices) && data.choices.length > 0) {
       const choice = data.choices[0];
@@ -73,10 +99,10 @@ export async function handleNvidiaApi(messages: Message[], config: ApiConfig): P
       throw new Error('Unexpected response format from NVIDIA API');
     }
 
-    // Process and clean the response
+    // Clean up the response content
     content = content.trim();
 
-    // Add usage information if available
+    // Log API usage if available
     if (data.usage) {
       console.debug('NVIDIA API Usage:', data.usage);
     }
@@ -84,8 +110,7 @@ export async function handleNvidiaApi(messages: Message[], config: ApiConfig): P
     return { content };
   } catch (error) {
     console.error('NVIDIA API Error:', error);
-    
-    // Enhanced error handling with specific error types
+
     let errorMessage: string;
     if (error instanceof TypeError) {
       errorMessage = 'Network or parsing error occurred. Please check your connection and try again.';
@@ -94,7 +119,7 @@ export async function handleNvidiaApi(messages: Message[], config: ApiConfig): P
     } else {
       errorMessage = 'An unexpected error occurred with the NVIDIA API. Please try again or switch to a different model.';
     }
-    
+
     return {
       content: errorMessage,
       error: error instanceof Error ? error.message : 'Unknown error'
