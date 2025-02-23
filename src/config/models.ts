@@ -74,7 +74,7 @@ export const modelConfigs: Record<string, ApiConfig> = {
   },
   'NVIDIA Deepseek-R1': {
     url: 'https://integrate.api.nvidia.com/v1/chat/completions',
-    key: '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',
+    key: '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',
     model: 'deepseek-ai/deepseek-r1',
   },
   'Gemini-2': {
