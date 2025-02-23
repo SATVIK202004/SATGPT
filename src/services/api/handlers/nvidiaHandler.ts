@@ -9,7 +9,7 @@ const NVIDIA_DEFAULTS = {
   frequency_penalty: 0.0,
   presence_penalty: 0.0,
   stop: null,
-  stream: false
+  stream: true
 };
 
 // Function to handle fetch with a timeout
