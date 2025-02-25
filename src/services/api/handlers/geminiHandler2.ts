@@ -5,25 +5,15 @@ import { getSystemPrompt } from './baseHandler';
 export async function handleGemini2Api(messages: Message[], config: ApiConfig): Promise<ModelResponse> {
   try {
     const systemPrompt = getSystemPrompt(messages.some(msg => msg.content.includes('SAT GPT')));
-
-    // Format messages with a highly structured deep thinking approach
+    
+    // Format messages into a conversation string with enhanced thinking prompts
     const conversation = messages.map(msg => {
       if (msg.role === 'user') {
-        return `Human: ${msg.content}\n\nPlease follow this advanced reasoning approach:\n` +
-               `1️⃣ **Question Breakdown**\n` +
-               `   • Identify core concepts\n` +
-               `   • Extract underlying patterns and assumptions\n\n` +
-               `2️⃣ **Multi-Perspective Analysis**\n` +
-               `   a) **Logical:** Step-by-step derivation of conclusions\n` +
-               `   b) **Historical/Scientific:** Past context and factual basis\n` +
-               `   c) **Philosophical/Ethical:** Human-centric impact & moral considerations\n` +
-               `   d) **Real-World Implications:** Practical and future outcomes\n\n` +
-               `3️⃣ **Deep Reasoning Chain**\n` +
-               `   • Cause-effect relationships\n` +
-               `   • Contradictions, paradoxes & counterarguments\n` +
-               `   • Alternative interpretations\n\n` +
-               `4️⃣ **Final Thoughtful Response**\n` +
-               `   • Clear, structured answer with summary & key takeaways.`;
+        return `Human: ${msg.content}\n\nPlease follow this structured approach:\n` +
+               `1. First, analyze the question and break it down into key components\n` +
+               `2. Consider relevant context and potential implications\n` +
+               `3. Form a logical reasoning chain\n` +
+               `4. Provide a comprehensive answer`;
       }
       return `Assistant: ${msg.content}`;
     }).join('\n\n');
@@ -42,17 +32,29 @@ export async function handleGemini2Api(messages: Message[], config: ApiConfig): 
           }]
         }],
         generationConfig: {
-          temperature: 0.65,
-          topK: 50,
-          topP: 0.92,
-          maxOutputTokens: 3072,
+          temperature: 0.7,
+          topK: 40,
+          topP: 0.95,
+          maxOutputTokens: 2048,
           stopSequences: ["Human:", "Assistant:"]
         },
         safetySettings: [
-          { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
-          { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
-          { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
-          { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" }
+          {
+            category: "HARM_CATEGORY_HARASSMENT",
+            threshold: "BLOCK_MEDIUM_AND_ABOVE"
+          },
+          {
+            category: "HARM_CATEGORY_HATE_SPEECH",
+            threshold: "BLOCK_MEDIUM_AND_ABOVE"
+          },
+          {
+            category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+            threshold: "BLOCK_MEDIUM_AND_ABOVE"
+          },
+          {
+            category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+            threshold: "BLOCK_MEDIUM_AND_ABOVE"
+          }
         ]
       }),
     });
@@ -75,32 +77,24 @@ export async function handleGemini2Api(messages: Message[], config: ApiConfig): 
     let content = data.candidates[0].content.parts[0].text.trim();
     content = content.replace(/^Assistant:\s*/i, '');
 
-    // Enhanced structured response formatting for deeper thought processes
+    // Enhanced response formatting with detailed sections
     if (!content.includes('Thinking Process:') && !content.includes('Reasoning:')) {
       const segments = content.split('\n\n');
       const thinkingProcess = segments[0] || '';
       const reasoning = segments.length > 1 ? segments[1] : '';
       const answer = segments.slice(2).join('\n\n') || content;
 
-      content = `🧠 **Deep Thinking Process:**\n${'='.repeat(60)}\n` +
-                `🔹 **Step 1: Fundamental Breakdown**\n` +
-                `   • Extracted core elements\n` +
-                `   • Identified underlying assumptions\n\n` +
-
-                `🔹 **Step 2: Multi-Perspective Analysis**\n` +
-                `   📌 **Logical Reasoning:** ${thinkingProcess}\n` +
-                `   📌 **Historical/Scientific Basis:** Researched supporting context.\n` +
-                `   📌 **Philosophical/Ethical Aspects:** Considered moral dilemmas.\n` +
-                `   📌 **Practical Implications:** Evaluated real-world outcomes.\n\n` +
-
-                `🤔 **Advanced Reasoning Chain:**\n${'='.repeat(60)}\n` +
-                `   🔄 **Cause & Effect Analysis:** ${reasoning}\n` +
-                `   🔄 **Possible Counterarguments & Limitations:**\n` +
-                `      - Scenario A: Alternative reasoning\n` +
-                `      - Scenario B: Contradictory evidence\n` +
-                `   🔄 **Alternative Interpretations:** Multiple perspectives analyzed.\n\n` +
-
-                `📌 **Final Answer & Key Takeaways:**\n${'='.repeat(60)}\n${answer}`;
+      content = `Thinking Process:\n${'-'.repeat(40)}\n` +
+                `• Analysis of Key Components:\n${thinkingProcess}\n\n` +
+                
+                `Reasoning Process:\n${'-'.repeat(40)}\n` +
+                `• Logical Framework:\n${reasoning}\n` +
+                `• Implications Considered:\n` +
+                `  - Context and relevance\n` +
+                `  - Potential impact\n` +
+                `  - Alternative perspectives\n\n` +
+                
+                `Detailed Answer:\n${'-'.repeat(40)}\n${answer}`;
     }
 
     return { content };
@@ -108,22 +102,24 @@ export async function handleGemini2Api(messages: Message[], config: ApiConfig): 
     console.error('Gemini API Error:', error);
     
     let errorMessage = 'An error occurred while processing your request.';
-
+    
     if (error instanceof Error) {
       if (error.message.includes('SAFETY')) {
-        errorMessage = '⚠️ The response was blocked due to safety concerns. Please rephrase your question.';
+        errorMessage = 'The response was blocked due to safety concerns. Please try rephrasing your question.';
       } else if (error.message.includes('rate limit')) {
-        errorMessage = '⏳ Rate limit exceeded. Please try again later.';
+        errorMessage = 'Rate limit exceeded. Please try again in a few moments.';
       } else if (error.message.includes('Invalid response format')) {
-        errorMessage = '⚠️ Invalid response format received. Retrying may help.';
+        errorMessage = 'Received an invalid response format. Please try again.';
       } else {
-        errorMessage = `❌ Error: ${error.message}. Try rephrasing or switching models.`;
+        errorMessage = `Error: ${error.message}. Please try again or switch to a different model.`;
       }
     }
-
+    
     return {
       content: errorMessage,
       error: error instanceof Error ? error.message : 'Unknown error',
     };
   }
 }
+
+
