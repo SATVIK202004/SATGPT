@@ -8,6 +8,7 @@ import { SplashScreen } from './components/SplashScreen';
 import { BubblesBackground } from './components/BubblesBackground';
 import { Clock } from './components/Clock';
 import { ShareButton } from './components/ShareButton';
+import { ModernCursor } from './components/ModernCursor';
 import { sendMessage } from './services/api';
 import { modelConfigs } from './config/models';
 import { INITIAL_MESSAGE } from './config/constants';
@@ -287,6 +288,7 @@ export function App() {
 
   return (
     <div className={`min-h-screen ${themes[currentTheme].background} ${themes[currentTheme].text}`}>
+      <ModernCursor />
       <BubblesBackground bubbleColors={themes[currentTheme].bubbleColors} />
       <div className="flex h-screen relative z-10">
         <div className="bg-gray-900 w-64 h-screen flex flex-col">
