@@ -17,3 +17,25 @@
 .shadow-glow {
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
 }
+
+/* Hide default cursor when custom cursor is active */
+body.custom-cursor-active {
+  cursor: none !important;
+}
+
+/* Ensure all interactive elements inherit the cursor style */
+body.custom-cursor-active a,
+body.custom-cursor-active button,
+body.custom-cursor-active input,
+body.custom-cursor-active select,
+body.custom-cursor-active textarea,
+body.custom-cursor-active [role="button"] {
+  cursor: none !important;
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .cursor-dot, .cursor-ring {
+    display: none !important;
+  }
+}
