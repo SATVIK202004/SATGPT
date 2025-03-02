@@ -49,7 +49,7 @@ export const modelConfigs: Record<string, ApiConfig> = {
   },
   'Gpt-4o mini': {
     url: 'https://models.inference.ai.azure.com/chat/completions',
-    key: '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',
+    key: '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',
     model: 'gpt-4o-mini',
   },
   'Qwen-2.5': {
@@ -69,7 +69,7 @@ export const modelConfigs: Record<string, ApiConfig> = {
   },
   'GPT-4o': {
     url: 'https://models.inference.ai.azure.com/chat/completions',
-    key: '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',
+    key: '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',
     model: 'gpt-4o',
   },
   'NVIDIA Deepseek-R1': {
