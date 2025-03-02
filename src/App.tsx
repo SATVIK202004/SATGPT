@@ -85,11 +85,28 @@ export function App() {
   const [ispDetails, setIspDetails] = useState<string>('');
   const [networkSpeed, setNetworkSpeed] = useState<string>('');
   const [speedRating, setSpeedRating] = useState<string>('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowSplash(false), 3000);
-    return () => clearTimeout(timer);
+    // Check if user is already authenticated
+    const userData = localStorage.getItem('satgpt_user');
+    if (userData) {
+      try {
+        const user = JSON.parse(userData);
+        if (user.name && user.dob) {
+          setIsAuthenticated(true);
+        }
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+        localStorage.removeItem('satgpt_user');
+      }
+    }
   }, []);
+
+  const handleSplashComplete = () => {
+    setShowSplash(false);
+    setIsAuthenticated(true);
+  };
 
   const handleNewChat = async () => {
     const newChat: Chat = {
@@ -251,12 +268,26 @@ export function App() {
     URL.revokeObjectURL(url);
   };
 
+  const handleSignOut = () => {
+    localStorage.removeItem('satgpt_user');
+    setIsAuthenticated(false);
+    setShowSplash(true);
+  };
+
   const selectedChat = chats.find(chat => chat.id === selectedChatId);
+  const userData = localStorage.getItem('satgpt_user') ? JSON.parse(localStorage.getItem('satgpt_user')!) : null;
+
+  if (showSplash) {
+    return <SplashScreen onComplete={handleSplashComplete} />;
+  }
+
+  if (!isAuthenticated) {
+    return <SplashScreen onComplete={handleSplashComplete} />;
+  }
 
   return (
     <div className={`min-h-screen ${themes[currentTheme].background} ${themes[currentTheme].text}`}>
       <BubblesBackground bubbleColors={themes[currentTheme].bubbleColors} />
-      {showSplash && <SplashScreen />}
       <div className="flex h-screen relative z-10">
         <div className="bg-gray-900 w-64 h-screen flex flex-col">
           <ModelSelector
@@ -289,32 +320,45 @@ export function App() {
                 ))}
               </select>
             </div>
-            {selectedChat && selectedChat.messages.length > 1 && (
-              <div className="flex items-center space-x-4">
-                <ShareButton 
-                  messages={selectedChat.messages}
-                  title={selectedChat.title}
-                />
-                <button
-                  onClick={() => window.open('https://www.codechef.com/ide', '_blank')}
-                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                >
-                  🖥️ CodeChef IDE
-                </button>
-                <RegenerateButton
-                  onClick={handleRegenerateResponse}
-                  disabled={isLoading}
-                  isLoading={isLoading}
-                  successMessage="Response regenerated!"
-                />
-                <button
-                  onClick={handleDownloadChat}
-                  className="px-4 py-2 bg-yellow-500 text-black rounded hover:bg-red-600"
-                >
-                  🔍 Download Chat
-                </button>
-              </div>
-            )}
+            <div className="flex items-center space-x-4">
+              {userData && (
+                <div className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg">
+                  Welcome, {userData.name}
+                </div>
+              )}
+              <button
+                onClick={handleSignOut}
+                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+              >
+                Sign Out
+              </button>
+              {selectedChat && selectedChat.messages.length > 1 && (
+                <>
+                  <ShareButton 
+                    messages={selectedChat.messages}
+                    title={selectedChat.title}
+                  />
+                  <button
+                    onClick={() => window.open('https://www.codechef.com/ide', '_blank')}
+                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  >
+                    🖥️ CodeChef IDE
+                  </button>
+                  <RegenerateButton
+                    onClick={handleRegenerateResponse}
+                    disabled={isLoading}
+                    isLoading={isLoading}
+                    successMessage="Response regenerated!"
+                  />
+                  <button
+                    onClick={handleDownloadChat}
+                    className="px-4 py-2 bg-yellow-500 text-black rounded hover:bg-red-600"
+                  >
+                    🔍 Download Chat
+                  </button>
+                </>
+              )}
+            </div>
           </div>
 
           {selectedChat ? (
@@ -343,7 +387,7 @@ export function App() {
             <div className="h-full flex items-center justify-center bg-gradient-to-r from-purple-50 to-pink-50">
               <div className="max-w-2xl w-full p-8 rounded-2xl bg-white shadow-xl">
                 <h1 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                  Welcome to SAT GPT
+                  Welcome to SAT GPT, {userData?.name}
                 </h1>
                 <div className="space-y-6">
                   {sampleQuestions.map((item, index) => (
