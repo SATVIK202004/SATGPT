@@ -16,19 +16,29 @@
     <script type="module" src="/src/main.tsx"></script>
     
     <div id="copyright" align="center">
-        &copy; 2024 - All Rights Reserved.
-        <span>Last Updated: </span>
+      &copy; 2024 - All Rights Reserved.
+      <span>Last Updated: </span>
     </div>
     
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const copyrightElement = document.getElementById("copyright");
-            const currentYear = new Date().getFullYear();
-            const lastModified = new Date(document.lastModified).toLocaleString();
-            copyrightElement.innerHTML = `&copy; 2024 - ${currentYear} <a href="https://sat-gpt-psi.vercel.app/" target="_blank">https://sat-gpt-psi.vercel.app/</a> - All Rights Reserved.<br/>Last Updated: ${lastModified}`;
-        });
+      document.addEventListener("DOMContentLoaded", () => {
+          const copyrightElement = document.getElementById("copyright");
+          const currentYear = new Date().getFullYear();
+          const lastModified = new Date(document.lastModified).toLocaleString();
+          copyrightElement.innerHTML = `&copy; 2024 - ${currentYear} <a href="https://sat-gpt-psi.vercel.app/" target="_blank">https://sat-gpt-psi.vercel.app/</a> - All Rights Reserved.<br/>Last Updated: ${lastModified}`;
+      });
     </script>
 
     <script defer src="https://static.getbutton.io/widget/bundle.js?id=AAln9"></script>
+    
+    <!-- Meter.net Widget -->
+    <div style="text-align:right;">
+      <div style="min-height:360px;">
+        <div style="width:100%;height:0;padding-bottom:50%;position:relative;">
+          <iframe style="border:none;position:absolute;top:0;left:0;width:100%;height:100%;min-height:360px;border:none;overflow:hidden !important;" src="https://www.metercustom.net/plugin/"></iframe>
+        </div>
+      </div>
+      Provided by <a href="https://www.meter.net">Meter.net</a>
+    </div>
   </body>
 </html>
