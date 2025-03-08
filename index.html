@@ -7,28 +7,48 @@
     <link rel="shortcut icon" href="SAT GPT.png" type="image/x-icon" />
     <meta name="google-adsense-account" content="ca-pub-9982532920143109">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9982532920143109"
-     crossorigin="anonymous"></script>
+      crossorigin="anonymous"></script>
     <meta name="google-site-verification" content="WfafFjE47rbuVmaEKBbGgok-o_88vRz1uf8Jywte6xk" />
     <title>SAT GPT</title>
+    <style>
+      /* Basic styling for the plugin container */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      #sat-gpt-widget-container {
+        max-width: 1000px;
+        margin: 20px auto;
+        padding: 20px;
+      }
+    </style>
   </head>
   <body>
+    <!-- SAT GPT Plugin Container -->
+    <div id="sat-gpt-widget-container">
+      <iframe src="https://sat-gpt-psi.vercel.app/" style="width: 100%; height: 600px; border: none;"></iframe>
+    </div>
+
+    <!-- Root element for potential additional content -->
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     
+    <!-- Copyright Footer -->
     <div id="copyright" align="center">
       &copy; 2024 - All Rights Reserved.
       <span>Last Updated: </span>
     </div>
-    
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-          const copyrightElement = document.getElementById("copyright");
-          const currentYear = new Date().getFullYear();
-          const lastModified = new Date(document.lastModified).toLocaleString();
-          copyrightElement.innerHTML = `&copy; 2024 - ${currentYear} <a href="https://sat-gpt-psi.vercel.app/" target="_blank">https://sat-gpt-psi.vercel.app/</a> - All Rights Reserved.<br/>Last Updated: ${lastModified}`;
+        const copyrightElement = document.getElementById("copyright");
+        const currentYear = new Date().getFullYear();
+        const lastModified = new Date(document.lastModified).toLocaleString();
+        copyrightElement.innerHTML = `&copy; 2024 - ${currentYear} <a href="https://sat-gpt-psi.vercel.app/" target="_blank">https://sat-gpt-psi.vercel.app/</a> - All Rights Reserved.<br/>Last Updated: ${lastModified}`;
       });
     </script>
 
+    <!-- Additional widget script -->
     <script defer src="https://static.getbutton.io/widget/bundle.js?id=AAln9"></script>
     
     <!-- Meter.net Widget -->
