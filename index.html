@@ -18,16 +18,12 @@
     <meta property="og:url" content="https://sat-gpt-psi.vercel.app/" />
     <meta name="theme-color" content="#ffffff">
 
-    <!-- AOS CSS for animations -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
-    
     <!-- Inline CSS for additional features -->
     <style>
       /* General styling */
       body {
         margin: 0;
         font-family: Arial, sans-serif;
-        transition: background-color 0.3s, color 0.3s;
       }
       /* Navigation Bar Styles */
       nav {
@@ -54,15 +50,6 @@
         padding: 5px 10px;
         border-radius: 5px;
       }
-      /* Search Bar Styles */
-      .search-container {
-        position: relative;
-      }
-      .search-container input[type="text"] {
-        padding: 5px;
-        border-radius: 3px;
-        border: none;
-      }
       /* Footer Styles */
       footer {
         background-color: #f2f2f2;
@@ -88,95 +75,6 @@
         0% { transform: translate(-50%, -50%) rotate(0deg); }
         100% { transform: translate(-50%, -50%) rotate(360deg); }
       }
-      /* Back-to-Top Button */
-      #back-to-top {
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        background-color: #3498db;
-        color: #fff;
-        border: none;
-        padding: 10px;
-        border-radius: 5px;
-        cursor: pointer;
-        display: none;
-        z-index: 999;
-      }
-      /* Modal Styles */
-      .modal {
-        display: none; /* Hidden by default */
-        position: fixed;
-        z-index: 10000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0,0,0,0.5);
-      }
-      .modal-content {
-        background-color: #fff;
-        margin: 15% auto;
-        padding: 20px;
-        border-radius: 5px;
-        width: 80%;
-        max-width: 500px;
-        position: relative;
-      }
-      .close-modal {
-        position: absolute;
-        top: 10px;
-        right: 15px;
-        color: #aaa;
-        font-size: 28px;
-        font-weight: bold;
-        cursor: pointer;
-      }
-      /* Cookie Consent Banner */
-      #cookie-banner {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: #333;
-        color: #fff;
-        padding: 10px 20px;
-        text-align: center;
-        z-index: 10000;
-      }
-      #cookie-banner button {
-        background-color: #3498db;
-        border: none;
-        padding: 5px 10px;
-        margin-left: 10px;
-        border-radius: 3px;
-        cursor: pointer;
-        color: #fff;
-      }
-      /* FAQ Accordion Styles */
-      .accordion {
-        background-color: #eee;
-        cursor: pointer;
-        padding: 14px;
-        width: 100%;
-        border: none;
-        text-align: left;
-        outline: none;
-        transition: background-color 0.2s ease;
-        margin-top: 5px;
-      }
-      .accordion.active, .accordion:hover {
-        background-color: #ccc;
-      }
-      .panel {
-        padding: 0 14px;
-        display: none;
-        background-color: white;
-        overflow: hidden;
-      }
-      .panel.show {
-        display: block;
-      }
     </style>
   </head>
   <body>
@@ -185,60 +83,20 @@
     
     <!-- Navigation Bar -->
     <nav>
-      <div class="nav-left">
+      <div class="nav-logo">
         <a href="https://sat-gpt-psi.vercel.app/"><strong>SAT GPT</strong></a>
       </div>
-      <div class="nav-center">
+      <div class="nav-links">
         <a href="#features">Features</a>
         <a href="#resources">Resources</a>
-        <a href="#faq">FAQ</a>
-        <a href="#" id="open-contact-modal">Contact</a>
+        <a href="#contact">Contact</a>
       </div>
-      <div class="nav-right">
-        <div class="search-container">
-          <input type="text" placeholder="Search..." id="search-bar">
-        </div>
-        <button id="dark-mode-toggle">Dark Mode</button>
-      </div>
+      <button id="dark-mode-toggle">Dark Mode</button>
     </nav>
     
     <!-- Main App Root -->
-    <div id="root" style="display: none;" data-aos="fade-up"></div>
+    <div id="root" style="display: none;"></div>
     <script type="module" src="/src/main.tsx"></script>
-    
-    <!-- FAQ Section -->
-    <section id="faq" data-aos="fade-up" style="padding: 20px;">
-      <h2>Frequently Asked Questions</h2>
-      <button class="accordion">What is SAT GPT?</button>
-      <div class="panel">
-        <p>SAT GPT is a platform dedicated to providing tools and resources for SAT preparation.</p>
-      </div>
-      <button class="accordion">How can I contact support?</button>
-      <div class="panel">
-        <p>You can contact our support team by clicking on the "Contact" link in the navigation bar.</p>
-      </div>
-      <button class="accordion">Does SAT GPT support dark mode?</button>
-      <div class="panel">
-        <p>Yes, you can toggle dark mode using the button in the navigation bar.</p>
-      </div>
-    </section>
-    
-    <!-- Contact Modal -->
-    <div id="contact-modal" class="modal">
-      <div class="modal-content" data-aos="zoom-in">
-        <span class="close-modal">&times;</span>
-        <h2>Contact Us</h2>
-        <form id="contact-form">
-          <label for="name">Name:</label><br/>
-          <input type="text" id="name" name="name" required><br/><br/>
-          <label for="email">Email:</label><br/>
-          <input type="email" id="email" name="email" required><br/><br/>
-          <label for="message">Message:</label><br/>
-          <textarea id="message" name="message" rows="4" required></textarea><br/><br/>
-          <button type="submit">Send Message</button>
-        </form>
-      </div>
-    </div>
     
     <!-- Copyright Section -->
     <div id="copyright" align="center">
@@ -254,24 +112,10 @@
         <a href="#privacy">Privacy Policy</a> |
         <a href="#terms">Terms of Service</a>
       </p>
-      <p>Current Time: <span id="live-clock"></span></p>
     </footer>
     
-    <!-- Back-to-Top Button -->
-    <button id="back-to-top">Top</button>
-    
-    <!-- Cookie Consent Banner -->
-    <div id="cookie-banner">
-      We use cookies to improve your experience. By using our site, you agree to our <a href="#privacy" style="color:#fff; text-decoration:underline;">Privacy Policy</a>.
-      <button id="accept-cookies">Accept</button>
-    </div>
-    
     <!-- Additional Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     <script>
-      // Initialize AOS
-      AOS.init();
-      
       // Dark Mode Toggle
       const darkModeToggle = document.getElementById('dark-mode-toggle');
       darkModeToggle.addEventListener('click', () => {
@@ -310,66 +154,6 @@
         const lastModified = new Date(document.lastModified).toLocaleString();
         copyrightElement.innerHTML = `&copy; 2024 - ${currentYear} <a href="https://sat-gpt-psi.vercel.app/" target="_blank">https://sat-gpt-psi.vercel.app/</a> - All Rights Reserved.<br/>Last Updated: ${lastModified}`;
       });
-      
-      // Back-to-Top Button Functionality
-      const backToTop = document.getElementById('back-to-top');
-      window.addEventListener('scroll', () => {
-        if(document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-          backToTop.style.display = 'block';
-        } else {
-          backToTop.style.display = 'none';
-        }
-      });
-      backToTop.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-      
-      // Contact Modal Functionality
-      const contactModal = document.getElementById('contact-modal');
-      const openContactModal = document.getElementById('open-contact-modal');
-      const closeModal = document.querySelector('.close-modal');
-      openContactModal.addEventListener('click', (e) => {
-        e.preventDefault();
-        contactModal.style.display = 'block';
-      });
-      closeModal.addEventListener('click', () => {
-        contactModal.style.display = 'none';
-      });
-      window.addEventListener('click', (e) => {
-        if(e.target == contactModal) {
-          contactModal.style.display = 'none';
-        }
-      });
-      
-      // FAQ Accordion Functionality
-      const accordions = document.getElementsByClassName("accordion");
-      for(let i = 0; i < accordions.length; i++){
-        accordions[i].addEventListener("click", function() {
-          this.classList.toggle("active");
-          let panel = this.nextElementSibling;
-          if(panel.style.display === "block") {
-            panel.style.display = "none";
-          } else {
-            panel.style.display = "block";
-          }
-        });
-      }
-      
-      // Cookie Consent Banner Functionality
-      const cookieBanner = document.getElementById('cookie-banner');
-      const acceptCookies = document.getElementById('accept-cookies');
-      acceptCookies.addEventListener('click', () => {
-        cookieBanner.style.display = 'none';
-      });
-      
-      // Live Clock Update
-      function updateClock() {
-        const liveClock = document.getElementById('live-clock');
-        const now = new Date();
-        liveClock.textContent = now.toLocaleTimeString();
-      }
-      setInterval(updateClock, 1000);
-      updateClock();
     </script>
     
     <script defer src="https://static.getbutton.io/widget/bundle.js?id=AAln9"></script>
