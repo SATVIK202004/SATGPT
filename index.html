@@ -6,29 +6,156 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="SAT GPT.png" type="image/x-icon" />
     <meta name="google-adsense-account" content="ca-pub-9982532920143109">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9982532920143109"
-     crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9982532920143109" crossorigin="anonymous"></script>
     <meta name="google-site-verification" content="WfafFjE47rbuVmaEKBbGgok-o_88vRz1uf8Jywte6xk" />
     <title>SAT GPT</title>
+    
+    <!-- SEO & Social Sharing Meta Tags -->
+    <meta name="description" content="SAT GPT - Your gateway to SAT success. Explore features, resources, and interactive tools for SAT preparation." />
+    <meta property="og:title" content="SAT GPT" />
+    <meta property="og:description" content="Your gateway to SAT success. Explore interactive tools and resources for SAT preparation." />
+    <meta property="og:image" content="path/to/your/og-image.jpg" />
+    <meta property="og:url" content="https://sat-gpt-psi.vercel.app/" />
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- Inline CSS for additional features -->
+    <style>
+      /* General styling */
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+      /* Navigation Bar Styles */
+      nav {
+        background-color: #333;
+        color: #fff;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      nav a {
+        color: #fff;
+        text-decoration: none;
+        margin: 0 10px;
+      }
+      nav a:hover {
+        text-decoration: underline;
+      }
+      #dark-mode-toggle {
+        cursor: pointer;
+        background-color: #555;
+        color: #fff;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+      }
+      /* Footer Styles */
+      footer {
+        background-color: #f2f2f2;
+        padding: 20px;
+        text-align: center;
+        font-size: 0.9em;
+      }
+      /* Loading Spinner */
+      #loader {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        border: 8px solid #f3f3f3;
+        border-top: 8px solid #3498db;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 1s linear infinite;
+        z-index: 9999;
+      }
+      @keyframes spin {
+        0% { transform: translate(-50%, -50%) rotate(0deg); }
+        100% { transform: translate(-50%, -50%) rotate(360deg); }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <!-- Loading Spinner -->
+    <div id="loader"></div>
+    
+    <!-- Navigation Bar -->
+    <nav>
+      <div class="nav-logo">
+        <a href="https://sat-gpt-psi.vercel.app/"><strong>SAT GPT</strong></a>
+      </div>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#resources">Resources</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <button id="dark-mode-toggle">Dark Mode</button>
+    </nav>
+    
+    <!-- Main App Root -->
+    <div id="root" style="display: none;"></div>
     <script type="module" src="/src/main.tsx"></script>
     
+    <!-- Copyright Section -->
     <div id="copyright" align="center">
       &copy; 2024 - All Rights Reserved.
       <span>Last Updated: </span>
     </div>
     
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2024 - <span id="current-year"></span> SAT GPT. All Rights Reserved.</p>
+      <p>
+        <a href="https://sat-gpt-psi.vercel.app/" target="_blank">Home</a> |
+        <a href="#privacy">Privacy Policy</a> |
+        <a href="#terms">Terms of Service</a>
+      </p>
+    </footer>
+    
+    <!-- Additional Scripts -->
     <script>
-      document.addEventListener("DOMContentLoaded", () => {
-          const copyrightElement = document.getElementById("copyright");
-          const currentYear = new Date().getFullYear();
-          const lastModified = new Date(document.lastModified).toLocaleString();
-          copyrightElement.innerHTML = `&copy; 2024 - ${currentYear} <a href="https://sat-gpt-psi.vercel.app/" target="_blank">https://sat-gpt-psi.vercel.app/</a> - All Rights Reserved.<br/>Last Updated: ${lastModified}`;
+      // Dark Mode Toggle
+      const darkModeToggle = document.getElementById('dark-mode-toggle');
+      darkModeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        if(document.body.classList.contains('dark-mode')){
+          darkModeToggle.textContent = "Light Mode";
+          document.body.style.backgroundColor = "#121212";
+          document.body.style.color = "#ffffff";
+        } else {
+          darkModeToggle.textContent = "Dark Mode";
+          document.body.style.backgroundColor = "";
+          document.body.style.color = "";
+        }
+      });
+      
+      // Hide loader and show main content after page loads
+      window.addEventListener('load', () => {
+        const loader = document.getElementById('loader');
+        const root = document.getElementById('root');
+        if(loader){
+          loader.style.display = 'none';
+        }
+        if(root){
+          root.style.display = 'block';
+        }
+        
+        // Update current year in footer
+        const currentYearSpan = document.getElementById('current-year');
+        const currentYear = new Date().getFullYear();
+        if(currentYearSpan) {
+          currentYearSpan.textContent = currentYear;
+        }
+        
+        // Update last modified info
+        const copyrightElement = document.getElementById("copyright");
+        const lastModified = new Date(document.lastModified).toLocaleString();
+        copyrightElement.innerHTML = `&copy; 2024 - ${currentYear} <a href="https://sat-gpt-psi.vercel.app/" target="_blank">https://sat-gpt-psi.vercel.app/</a> - All Rights Reserved.<br/>Last Updated: ${lastModified}`;
       });
     </script>
-
+    
     <script defer src="https://static.getbutton.io/widget/bundle.js?id=AAln9"></script>
     
     <!-- Meter.net Widget -->
